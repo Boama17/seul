@@ -8,15 +8,18 @@ import logo from "@/assets/img/white.png";
 
 interface WaitlistOverlayProps {
   onComplete: () => void;
-  targetDate: string; // Format: "2025-12-31T23:59:59"
 }
 
-const WaitlistOverlay: React.FC<WaitlistOverlayProps> = ({ onComplete, targetDate }) => {
+const WaitlistOverlay: React.FC<WaitlistOverlayProps> = ({ onComplete }) => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [error, setError] = useState('');
+
+  // 🔹 Countdown target = September 21st of the current year
+  const currentYear = new Date().getFullYear();
+  const targetDate = new Date(`${currentYear}-09-21T00:00:00`).toISOString();
 
   // Initialize EmailJS
   useEffect(() => {
