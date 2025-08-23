@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Hubot_Sans } from 'next/font/google';
 
 // Image imports - only importing the ones we're using
-import image001 from "@/assets/img/001.jpeg";
+import image011 from "@/assets/img/011.jpeg";
 import image004 from "@/assets/img/004.jpeg";
 import image006 from "@/assets/img/006.jpeg";
 import image009 from "@/assets/img/009.jpeg";
@@ -35,17 +35,25 @@ const Hero = () => {
 
   return (
     <div className={`relative w-full bg-black text-white overflow-hidden ${hubotSans.variable} font-sans`}>
-      
       <div className="w-full h-[70vh] relative overflow-hidden">
-        {/* Grid layout for multiple portrait images side by side */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 h-full">
-
-        
+        {/* Mobile: show only one image, Desktop: show grid */}
+        <div className="block sm:hidden h-full">
+          <div className="relative w-full h-full">
+            <Image 
+              src={image011}
+              alt="Model wearing PESO outfit"
+              fill
+              className="object-cover object-top"
+              priority
+            />
+          </div>
+        </div>
+        <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 h-full">
           {/* First portrait image */}
           <div className="col-span-1 relative overflow-hidden">
             <div className="absolute inset-0 w-full h-full">
               <Image 
-                src={image001} 
+                src={image011} 
                 alt="Model wearing PESO outfit" 
                 fill 
                 className="object-cover object-top" 
@@ -53,8 +61,7 @@ const Hero = () => {
               />
             </div>
           </div>
-          
-          {/* Second portrait image - cropped to show different part */}
+          {/* Second portrait image */}
           <div className="col-span-1 relative overflow-hidden">
             <div className="absolute inset-0 w-full h-full">
               <Image 
@@ -66,8 +73,7 @@ const Hero = () => {
               />
             </div>
           </div>
-          
-          {/* Third portrait image - cropped differently */}
+          {/* Third portrait image */}
           <div className="col-span-1 relative overflow-hidden">
             <div className="absolute inset-0 w-full h-full">
               <Image 
@@ -79,7 +85,6 @@ const Hero = () => {
               />
             </div>
           </div>
-          
           {/* Fourth portrait image */}
           <div className="col-span-1 relative overflow-hidden">
             <div className="absolute inset-0 w-full h-full">
