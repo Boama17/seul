@@ -107,117 +107,111 @@ const WaitlistOverlay: React.FC<WaitlistOverlayProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black flex items-center justify-center p-4">
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div 
-          className="w-full h-full" 
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px'
-          }}
-        />
+    <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-6">
+      {/* Animated backdrop with subtle pattern */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.1)_1px,transparent_0)] bg-[length:30px_30px] animate-pulse-slow"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black to-black opacity-70"></div>
       </div>
       
-      <div className="relative max-w-lg w-full bg-white border border-gray-200 rounded-lg p-8 shadow-2xl">
+      {/* Main content container - landscape layout */}
+      <div className="relative w-full max-w-5xl h-auto min-h-[450px] bg-black border border-gray-800 rounded-2xl p-10 shadow-2xl backdrop-blur-md bg-opacity-90 flex flex-col lg:flex-row items-center justify-between gap-10">
         {!isSubmitted ? (
           <>
-            {/* Logo/Brand Area */}
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-black rounded-full mx-auto mb-6 flex items-center justify-center">
-                <Image src={logo} alt="Logo" className="w-16 h-16 object-cover" />
+            {/* Left side - Branding and countdown */}
+            <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+              <div className="w-24 h-24 bg-gradient-to-br from-gray-900 to-black rounded-full mb-8 flex items-center justify-center p-1 shadow-lg">
+                <div className="w-full h-full bg-black rounded-full flex items-center justify-center border border-gray-800">
+                  <Image src={logo} alt="Logo" className="w-48 h-48 object-contain" />
+                </div>
               </div>
-              <h1 className="text-3xl font-bold text-black mb-2">Coming Soon</h1>
-              <p className="text-gray-600 text-lg">Something great is in the works</p>
-            </div>
+              <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">Coming Soon</h1>
+              <div className="h-px w-20 bg-gradient-to-r from-transparent via-gray-600 to-transparent mb-5"></div>
+              <p className="text-gray-400 text-lg mb-8">Something extraordinary is brewing</p>
 
-            {/* Countdown Timer */}
-            <div className="mb-8">
-              <div className="grid grid-cols-4 gap-3">
-                <div className="text-center">
-                  <div className="bg-black text-white rounded-lg p-4 mb-2">
-                    <div className="text-2xl font-bold font-mono">{formatTime(timeLeft.days)}</div>
-                  </div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium">Days</div>
-                </div>
-                <div className="text-center">
-                  <div className="bg-black text-white rounded-lg p-4 mb-2">
-                    <div className="text-2xl font-bold font-mono">{formatTime(timeLeft.hours)}</div>
-                  </div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium">Hours</div>
-                </div>
-                <div className="text-center">
-                  <div className="bg-black text-white rounded-lg p-4 mb-2">
-                    <div className="text-2xl font-bold font-mono">{formatTime(timeLeft.minutes)}</div>
-                  </div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium">Min</div>
-                </div>
-                <div className="text-center">
-                  <div className="bg-black text-white rounded-lg p-4 mb-2">
-                    <div className="text-2xl font-bold font-mono">{formatTime(timeLeft.seconds)}</div>
-                  </div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium">Sec</div>
+              {/* Countdown Timer */}
+              <div className="w-full mb-8">
+                <div className="grid grid-cols-4 gap-3">
+                  {[
+                    { value: timeLeft.days, label: 'Days' },
+                    { value: timeLeft.hours, label: 'Hours' },
+                    { value: timeLeft.minutes, label: 'Min' },
+                    { value: timeLeft.seconds, label: 'Sec' }
+                  ].map((item, index) => (
+                    <div key={index} className="text-center">
+                      <div className="bg-gradient-to-b from-gray-900 to-black border border-gray-800 text-white rounded-xl p-3 mb-2 shadow-lg">
+                        <div className="text-xl font-bold font-mono tracking-wide">{formatTime(item.value)}</div>
+                      </div>
+                      <div className="text-xs text-gray-500 uppercase tracking-widest font-medium">{item.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Subscription Message */}
-            <div className="text-center mb-8">
-              <h2 className="text-xl font-semibold text-black mb-2">Be the first to know</h2>
-              <p className="text-gray-600 leading-relaxed">Join our waitlist and get exclusive early access when we launch.</p>
-            </div>
+            {/* Right side - Form */}
+            <div className="flex-1 w-full max-w-md">
+              <div className="bg-gradient-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-8 shadow-lg">
+                <div className="text-center mb-7">
+                  <h2 className="text-2xl font-semibold text-white mb-3">Join the Waitlist</h2>
+                  <p className="text-gray-400">Be the first to know when we launch</p>
+                </div>
 
-            {/* Email Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200"
-                  disabled={isSubmitting}
-                />
-                {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      className="w-full px-5 py-4 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent transition-all duration-300"
+                      disabled={isSubmitting}
+                    />
+                    {error && <p className="text-red-400 text-sm mt-2 px-1">{error}</p>}
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-white text-black font-semibold py-4 px-6 rounded-xl hover:bg-gray-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-xl"
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center justify-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Securing your spot...
+                      </span>
+                    ) : (
+                      'Join Now'
+                    )}
+                  </button>
+                </form>
+
+                <p className="text-gray-600 text-xs text-center mt-6">
+                  We respect your privacy. No spam, unsubscribe anytime.
+                </p>
               </div>
-              
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Joining waitlist...
-                  </span>
-                ) : (
-                  'Join the Waitlist'
-                )}
-              </button>
-            </form>
-
-            <p className="text-gray-500 text-xs text-center mt-6">
-              No spam, unsubscribe at any time.
-            </p>
+            </div>
           </>
         ) : (
           /* Success State */
-          <div className="text-center">
-            <div className="w-16 h-16 bg-black rounded-full mx-auto mb-6 flex items-center justify-center">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-              </svg>
+          <div className="w-full text-center py-10">
+            <div className="w-24 h-24 bg-gradient-to-br from-gray-900 to-black rounded-full mx-auto mb-8 flex items-center justify-center p-1 shadow-lg">
+              <div className="w-full h-full bg-black rounded-full flex items-center justify-center border border-gray-800">
+                <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-black mb-2">You&apos;re all set!</h2>
-            <p className="text-gray-600 mb-6 leading-relaxed">Thanks for joining our waitlist. We&apos;ll notify you when we launch!</p>
-            <p className="text-gray-500 text-sm">Redirecting to the main site...</p>
+            <h2 className="text-3xl font-bold text-white mb-4">You&apos;re on the list!</h2>
+            <div className="h-px w-16 bg-gradient-to-r from-transparent via-gray-600 to-transparent mx-auto mb-5"></div>
+            <p className="text-gray-400 mb-8 leading-relaxed max-w-md mx-auto">Thank you for joining our waitlist. We&apos;ll notify you as soon as we launch!</p>
+            <div className="inline-flex items-center justify-center mt-6 px-5 py-3 bg-gray-900 rounded-xl border border-gray-800">
+              <div className="h-2 w-2 bg-white rounded-full animate-ping mr-3"></div>
+              <p className="text-gray-400 text-sm">Redirecting you now...</p>
+            </div>
           </div>
         )}
       </div>
